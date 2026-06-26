@@ -4,7 +4,6 @@ import HeroSection  from './sections/HeroSection';
 import GallerySection from './sections/GallerySection';
 import FeaturesStrip  from './sections/FeaturesStrip';
 import HowItWorks     from './sections/HowItWorks';
-import AboutSection   from './sections/AboutSection';
 import FAQSection     from './sections/FAQSection';
 import CTASection     from './sections/CTASection';
 import { gradients }  from '@/constants/colors';
@@ -22,7 +21,6 @@ export default function Home() {
 
       <FeaturesStrip />
       <HowItWorks />
-      <AboutSection />
       <FAQSection />
       <CTASection />
       <Footer />

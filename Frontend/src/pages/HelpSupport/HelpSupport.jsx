@@ -3,32 +3,6 @@ import Navbar from '@/components/Navbar/Navbar';
 import Footer from '@/components/Footer/Footer';
 import { gradients, colors } from '@/constants/colors';
 
-const COMMON_FAQS = [
-  {
-    q: 'Do I need technical skills to use this platform?',
-    a: 'No. The platform is designed for beginners. Everything is guided step by step, using simple language and clear buttons.',
-  },
-  {
-    q: "Can I use this even if I don't know English?",
-    a: 'Yes! The platform supports multiple languages including Urdu, Hindi, Arabic, Bengali, and more.',
-  },
-  {
-    q: 'What kind of businesses can I start with this?',
-    a: 'Any kind — products, services, creative work, handmade goods, consulting, and more. The AI guides you based on your goals.',
-  },
-  {
-    q: 'How does the AI help me?',
-    a: 'AI creates your business plan, writes product descriptions, suggests pricing, and helps generate content for social media.',
-  },
-  {
-    q: 'Is this platform free to use?',
-    a: 'You can get started for free. Premium plans are available for businesses that need more advanced tools.',
-  },
-  {
-    q: 'Will I be able to track my progress?',
-    a: "Yes — your dashboard shows every step completed and what's next, so you always know how your business is growing.",
-  },
-];
 
 const TROUBLE_FAQS = [
   {
@@ -105,10 +79,8 @@ function AccordionItem({ question, answer, isOpen, onToggle }) {
 }
 
 export default function HelpSupport() {
-  const [openFaq,     setOpenFaq]     = useState(0);
   const [openTrouble, setOpenTrouble] = useState(0);
 
-  const toggleFaq     = (i) => setOpenFaq(openFaq === i ? null : i);
   const toggleTrouble = (i) => setOpenTrouble(openTrouble === i ? null : i);
 
   return (
@@ -246,30 +218,7 @@ export default function HelpSupport() {
           </div>
         </div>
 
-        {/* ── Common Questions ─────────────────────── */}
-        <div style={{
-          background:   '#ffffff',
-          borderRadius: 16,
-          padding:      '32px 32px',
-          border:       '1.5px solid rgba(200,195,225,0.4)',
-          boxShadow:    '0 2px 12px rgba(100,80,180,0.05)',
-          marginBottom: 28,
-        }}>
-          <h2 style={{ fontSize: 20, fontWeight: 600, color: colors.dark, marginBottom: 24, letterSpacing: '-0.01em' }}>
-            Common Questions About Getting Started
-          </h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {COMMON_FAQS.map((item, i) => (
-              <AccordionItem
-                key={i}
-                question={item.q}
-                answer={item.a}
-                isOpen={openFaq === i}
-                onToggle={() => toggleFaq(i)}
-              />
-            ))}
-          </div>
-        </div>
+
 
         {/* ── Having Trouble? ──────────────────────── */}
         <div style={{
