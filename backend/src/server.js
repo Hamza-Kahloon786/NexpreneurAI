@@ -6,6 +6,7 @@ const authRoutes               = require('./routes/authRoutes');
 const userRoutes               = require('./routes/userRoutes');
 const businessPlanRoutes       = require('./routes/businessPlanRoutes');
 const productDescriptionRoutes = require('./routes/productDescriptionRoutes');
+const adminRoutes              = require('./routes/adminRoutes');
 
 const app  = express();
 const PORT = process.env.PORT || 5000;
@@ -20,6 +21,7 @@ app.use('/api/auth',          authRoutes);
 app.use('/api/user',          userRoutes);
 app.use('/api/business-plan',       businessPlanRoutes);
 app.use('/api/product-description', productDescriptionRoutes);
+app.use('/api/admin',               adminRoutes);
 
 app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
 app.use((_req, res) => res.status(404).json({ message: 'Route not found' }));

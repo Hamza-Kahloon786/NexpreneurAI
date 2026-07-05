@@ -12,6 +12,9 @@ import ProductDescriptionResult   from '@/pages/ProductDescription/ProductDescri
 import MyProgress                 from '@/pages/MyProgress/MyProgress';
 import About                      from '@/pages/About/About';
 import HelpSupport                from '@/pages/HelpSupport/HelpSupport';
+import AdminLogin                 from '@/pages/Admin/AdminLogin';
+import AdminDashboard             from '@/pages/Admin/AdminDashboard';
+import AdminUsers                 from '@/pages/Admin/AdminUsers';
 import ProtectedRoute      from '@/components/ProtectedRoute/ProtectedRoute';
 
 const Protected = ({ children }) => (
@@ -34,6 +37,10 @@ export default function App() {
       <Route path="/my-progress"                    element={<Protected><MyProgress /></Protected>} />
       <Route path="/about"                          element={<About />} />
       <Route path="/help-support"                   element={<HelpSupport />} />
+      <Route path="/admin"                          element={<Navigate to="/admin/login" replace />} />
+      <Route path="/admin/login"                    element={<AdminLogin />} />
+      <Route path="/admin/dashboard"                element={<AdminDashboard />} />
+      <Route path="/admin/users"                    element={<AdminUsers />} />
       <Route path="*"                               element={<Navigate to="/" replace />} />
     </Routes>
   );

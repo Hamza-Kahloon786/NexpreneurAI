@@ -9,6 +9,8 @@ const userSchema = new mongoose.Schema(
     googleId: { type: String, default: null },
     avatar:   { type: String, default: null },
     provider: { type: String, enum: ['local', 'google'], default: 'local' },
+    isAdmin:  { type: Boolean, default: false },
+    isActive: { type: Boolean, default: true },
   },
   { timestamps: true }
 );
