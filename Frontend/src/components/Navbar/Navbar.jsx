@@ -26,7 +26,7 @@ export default function Navbar() {
           style={{ background: 'none', border: 'none', padding: 0, transition: 'transform 0.2s' }}
           onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.08)')}
           onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}>
-          <Logo />
+          <Logo size={52} />
         </button>
 
         <div className="hidden md:flex items-center" style={{ gap: 32 }}>

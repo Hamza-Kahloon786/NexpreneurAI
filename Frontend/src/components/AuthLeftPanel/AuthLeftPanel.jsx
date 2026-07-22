@@ -58,7 +58,7 @@ export default function AuthLeftPanel() {
       </div>
 
       <div style={{ marginBottom: 20 }} className="anim-fade-in delay-200">
-        <Logo light size={32} />
+        <Logo size={42} />
       </div>
 
       <h2

@@ -38,7 +38,7 @@ export default function DashboardNavbar() {
           style={{ background: 'none', border: 'none', padding: 0, transition: 'transform 0.2s' }}
           onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.08)')}
           onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}>
-          <Logo />
+          <Logo size={48} />
         </button>
 
         <div className="flex items-center" style={{ gap: 4 }}>

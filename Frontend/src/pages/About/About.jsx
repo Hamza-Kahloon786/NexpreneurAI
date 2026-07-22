@@ -51,18 +51,19 @@ const ArrowIcon = () => (
 );
 
 const CREDENTIALS = [
-  'Business Administration & Entrepreneurship',
-  'AI & Technology Research',
-  'Digital Marketing & E-Commerce',
-  'Multilingual Business Development',
+  'Computer Science & Software Development',
+  'Management & Project Management',
+  'AI & Entrepreneurship Research',
+  'Digital Transformation & Innovation',
 ];
 
 const COMPANY_INFO = [
-  { label: 'Company Name',    value: 'NexpreneurAI' },
-  { label: 'Founded',         value: '2026' },
-  { label: 'Platform Type',   value: 'AI-Powered SaaS' },
-  { label: 'Target Audience', value: 'Beginner Entrepreneurs' },
-  { label: 'Languages',       value: '10+ Supported' },
+  { label: 'Founder',        value: 'Areej Tahir' },
+  { label: 'Company Name',   value: 'NexpreneurAI' },
+  { label: 'Founded',        value: '2026' },
+  { label: 'Platform Type',  value: 'AI-Driven Entrepreneurship Platform' },
+  { label: 'Who We Serve',   value: 'Anyone Looking to Start, Build, or Grow a Business' },
+  { label: 'Languages',      value: '10+ Supported' },
 ];
 
 export default function About() {
@@ -93,7 +94,7 @@ export default function About() {
           maxWidth:      1060,
           margin:        '0 auto',
         }}>
-          Built by someone who believed everyone deserves<br />a chance to build something real
+          Built by someone who believed everyone deserves the opportunity to turn an idea into a successful business.
         </h1>
       </section>
 
@@ -120,7 +121,7 @@ export default function About() {
               </div>
             </div>
 
-            <h2 style={{ fontSize: 24, fontWeight: 700, color: DARK, marginBottom: 4, textAlign: 'center' }}>Areej</h2>
+            <h2 style={{ fontSize: 24, fontWeight: 700, color: DARK, marginBottom: 4, textAlign: 'center' }}>Areej Tahir</h2>
             <p style={{ fontSize: 13.5, color: PURPLE, fontWeight: 600, textAlign: 'center', marginBottom: 20 }}>
               Founder &amp; CEO, NexpreneurAI
             </p>
@@ -164,33 +165,43 @@ export default function About() {
           {/* Right — story */}
           <div style={{ flex: 1, paddingTop: 8 }}>
             <p style={{ fontSize: 16.5, color: DARK, lineHeight: 1.8, marginBottom: 24, fontWeight: 500 }}>
-              NexpreneurAI was founded by Areej with a clear conviction: starting a business should not require technical knowledge,
-              fluency in English, or access to expensive consultants. Every person — regardless of background — deserves
-              the tools to turn their idea into a real, profitable business.
+              NexpreneurAI was founded by Areej Tahir with a clear conviction: entrepreneurship should not be
+              limited by language, technical expertise, or access to expensive business consultants. Every
+              aspiring entrepreneur deserves the opportunity to transform an idea into a successful business
+              through accessible and intelligent technology.
             </p>
             <p style={{ fontSize: 15, color: MUTED, lineHeight: 1.85, marginBottom: 24 }}>
-              After researching the barriers that stop beginners from launching businesses — language gaps,
-              overwhelming complexity, and lack of personalised guidance — Areej saw a critical opportunity:
-              AI could remove every one of those barriers. That insight became the foundation for NexpreneurAI.
+              Areej's background spans computer science, management, project management, digital transformation,
+              and peer-reviewed research in AI-driven entrepreneurship. Through academic research, professional
+              experience, and direct engagement with entrepreneurs from diverse backgrounds, she recognised a
+              recurring challenge: many aspiring founders have innovative ideas but struggle to navigate business
+              planning, branding, marketing, and decision-making due to limited guidance, language barriers, and
+              the complexity of existing tools. This insight became the foundation for NexpreneurAI.
             </p>
             <p style={{ fontSize: 15, color: MUTED, lineHeight: 1.85, marginBottom: 24 }}>
-              NexpreneurAI is developing AI-powered business guidance tools that help anyone — women entrepreneurs,
-              young people, and underserved communities — create business plans, generate product descriptions,
-              manage pricing, and build a brand presence across social media platforms, all in their own language.
+              NexpreneurAI is an AI-driven entrepreneurship platform that enables individuals to transform ideas
+              into viable businesses through AI-assisted business planning, multilingual guidance, product
+              development support, branding assistance, and content generation. By combining artificial
+              intelligence with practical business knowledge, the platform simplifies complex entrepreneurial
+              processes into accessible, step-by-step experiences regardless of background or level of expertise.
             </p>
             <p style={{ fontSize: 15, color: MUTED, lineHeight: 1.85, marginBottom: 24 }}>
-              The platform is built around simplicity. Whether you speak English, Urdu, Arabic, Hindi, or any
-              of 10 supported languages, NexpreneurAI guides you step by step — from your very first idea all
-              the way to launching, pricing, and marketing your product with confidence.
+              Unlike general-purpose AI assistants, NexpreneurAI is purpose-built for entrepreneurship,
+              providing structured workflows, multilingual guidance, and specialised business tools that support
+              users throughout the complete entrepreneurial journey — from idea validation and business planning
+              to branding, marketing, and business growth.
             </p>
             <p style={{ fontSize: 15, color: MUTED, lineHeight: 1.85, marginBottom: 24 }}>
-              Through AI-powered tools like business plan generation, product description writing, and social
-              media content creation, we remove the technical and financial barriers that have historically
-              prevented talented people from becoming successful entrepreneurs.
+              Since founding NexpreneurAI, the focus has been on translating research into practical innovation
+              through product development, user-centred design, multilingual accessibility, and the creation of
+              AI-powered tools that reduce barriers to entrepreneurship. The platform continues to evolve through
+              ongoing research, iterative product development, and user feedback to ensure meaningful real-world
+              impact.
             </p>
             <p style={{ fontSize: 15, color: MUTED, lineHeight: 1.85 }}>
-              Our long-term vision is to make AI-powered entrepreneurship accessible to every person on earth —
-              empowering individuals to build real businesses with confidence, clarity, and purpose.
+              Our long-term vision is to make AI-powered entrepreneurship accessible to everyone — empowering
+              individuals from all backgrounds to create sustainable businesses, unlock economic opportunities,
+              and contribute to inclusive innovation on a global scale.
             </p>
           </div>
         </div>
@@ -235,7 +246,7 @@ export default function About() {
               display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
               minHeight: 260 }}>
               <p style={{ fontSize: 22, fontWeight: 700, color: DARK, lineHeight: 1.45, marginBottom: 28 }}>
-                Making AI-powered entrepreneurship accessible to every person — because great businesses
+                Making AI-powered entrepreneurship accessible to every person because great businesses
                 can come from anyone, anywhere.
               </p>
               <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>

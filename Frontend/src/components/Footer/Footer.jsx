@@ -12,7 +12,7 @@ export default function Footer() {
 
         {/* ── Logo — sits above the main row ───── */}
         <div style={{ marginBottom: 32 }}>
-          <Logo light />
+          <Logo size={52} />
         </div>
 
         {/* ── Main row: heading+text+btn | columns  */}

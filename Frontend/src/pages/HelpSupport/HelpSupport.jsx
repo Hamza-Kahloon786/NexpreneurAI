@@ -151,7 +151,7 @@ export default function HelpSupport() {
                   </svg>
                 ),
                 label: 'Email',
-                value: 'info@nexpreneuai.co.uk',
+                value: '*********',
               },
               {
                 icon: (
@@ -160,7 +160,7 @@ export default function HelpSupport() {
                   </svg>
                 ),
                 label: 'Phone',
-                value: '+44 7448 781708',
+                value: '*********',
               },
               {
                 icon: (
@@ -169,7 +169,7 @@ export default function HelpSupport() {
                   </svg>
                 ),
                 label: 'LinkedIn',
-                value: 'linkedin.com/company/nexpreneuai',
+                value: '*********',
               },
               {
                 icon: (
@@ -178,7 +178,7 @@ export default function HelpSupport() {
                   </svg>
                 ),
                 label: 'Registered Office',
-                value: 'Worcester, United Kingdom',
+                value: 'London, United Kingdom',
               },
               {
                 icon: (
@@ -187,7 +187,7 @@ export default function HelpSupport() {
                   </svg>
                 ),
                 label: 'Company',
-                value: 'NexpreneurAI Ltd — Reg. No. 17256706',
+                value: 'NexpreneurAI Ltd',
               },
             ].map(({ icon, label, value }, i, arr) => (
               <div key={label} style={{

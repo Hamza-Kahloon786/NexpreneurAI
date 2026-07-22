@@ -66,13 +66,20 @@ export default function AdminUsers() {
   const navigate = useNavigate();
   const token    = localStorage.getItem('adminToken');
 
-  const [users,   setUsers]   = useState([]);
-  const [total,   setTotal]   = useState(0);
-  const [page,    setPage]    = useState(1);
-  const [pages,   setPages]   = useState(1);
-  const [search,  setSearch]  = useState('');
-  const [loading, setLoading] = useState(false);
-  const [toast,   setToast]   = useState('');
+  const [users,    setUsers]    = useState([]);
+  const [total,    setTotal]    = useState(0);
+  const [page,     setPage]     = useState(1);
+  const [pages,    setPages]    = useState(1);
+  const [search,   setSearch]   = useState('');
+  const [loading,  setLoading]  = useState(false);
+  const [toast,    setToast]    = useState('');
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
+
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
 
   /* Password modal state */
   const [pwdModal,   setPwdModal]   = useState(null); // user object
@@ -166,26 +173,28 @@ export default function AdminUsers() {
       {/* Toast */}
       {toast && (
         <div style={{
-          position:   'fixed',
-          bottom:     28,
-          right:      28,
-          background: colors.authBtn,
-          color:      '#fff',
-          padding:    '12px 20px',
+          position:     'fixed',
+          bottom:       isMobile ? 16 : 28,
+          right:        isMobile ? 14 : 28,
+          left:         isMobile ? 14 : 'auto',
+          background:   colors.authBtn,
+          color:        '#fff',
+          padding:      '12px 20px',
           borderRadius: 10,
-          fontSize:   14,
-          fontWeight: 500,
-          zIndex:     2000,
-          boxShadow:  '0 8px 24px rgba(0,0,0,0.18)',
+          fontSize:     14,
+          fontWeight:   500,
+          zIndex:       2000,
+          boxShadow:    '0 8px 24px rgba(0,0,0,0.18)',
+          textAlign:    isMobile ? 'center' : 'left',
         }}>
           {toast}
         </div>
       )}
 
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 28, gap: 16, flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', justifyContent: 'space-between', alignItems: isMobile ? 'stretch' : 'flex-start', marginBottom: 24, gap: 14 }}>
         <div>
-          <h1 style={{ fontSize: 26, fontWeight: 700, color: colors.dark, margin: '0 0 4px', letterSpacing: '-0.02em' }}>
+          <h1 style={{ fontSize: isMobile ? 22 : 26, fontWeight: 700, color: colors.dark, margin: '0 0 4px', letterSpacing: '-0.02em' }}>
             User Management
           </h1>
           <p style={{ fontSize: 14, color: colors.muted, margin: 0 }}>{total} registered user{total !== 1 ? 's' : ''}</p>
@@ -197,7 +206,7 @@ export default function AdminUsers() {
           placeholder="Search by name or email…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          style={{ ...inputStyle, width: 280 }}
+          style={{ ...inputStyle, width: isMobile ? '100%' : 280 }}
           onFocus={(e) => { e.target.style.borderColor = colors.purple; }}
           onBlur={(e)  => { e.target.style.borderColor = '#e0e0e8'; }}
         />
@@ -212,7 +221,8 @@ export default function AdminUsers() {
         overflow:     'hidden',
         marginBottom: 24,
       }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <div style={{ overflowX: 'auto' }}>
+        <table style={{ width: '100%', minWidth: 660, borderCollapse: 'collapse' }}>
           <thead>
             <tr style={{ background: '#f9f8fd', borderBottom: '1.5px solid rgba(200,195,225,0.4)' }}>
               {['Name', 'Email', 'Provider', 'Status', 'Joined', 'Actions'].map((h) => (
@@ -358,6 +368,7 @@ export default function AdminUsers() {
             ))}
           </tbody>
         </table>
+        </div>
       </div>
 
       {/* Pagination */}

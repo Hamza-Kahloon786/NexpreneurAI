@@ -9,7 +9,6 @@ const GAP     = 14;
 const STRIDE  = ITEM_W + GAP;
 const SET_W   = GALLERY_IMAGES.length * STRIDE;
 
-/* 6× copies — enough to fill any screen from edge to edge */
 const TRACK_IMAGES = [
   ...GALLERY_IMAGES, ...GALLERY_IMAGES,
   ...GALLERY_IMAGES, ...GALLERY_IMAGES,
@@ -17,73 +16,29 @@ const TRACK_IMAGES = [
 ];
 
 export default function GallerySection() {
-  const wrapRef    = useRef(null);
-  const trackRef   = useRef(null);
-  const posRef     = useRef(SET_W);   /* start mid-track so both edges are pre-filled */
-  const rafRef     = useRef(null);
-  const paused     = useRef(false);
-  const prevCenter = useRef(-1);
+  const wrapRef  = useRef(null);
+  const trackRef = useRef(null);
+  const posRef   = useRef(SET_W);
+  const rafRef   = useRef(null);
 
   useEffect(() => {
-    const wrap  = wrapRef.current;
     const track = trackRef.current;
-    if (!wrap || !track) return;
+    if (!track) return;
 
-    /* Apply initial position BEFORE first paint */
     track.style.transform = `translateX(-${posRef.current}px)`;
 
     const SPEED = 0.7;
 
     const tick = () => {
-      if (!paused.current) {
-        posRef.current += SPEED;
-        /* Seamless reset: loop between SET_W and SET_W*3 */
-        if (posRef.current >= SET_W * 3) posRef.current = SET_W;
-        track.style.transform = `translateX(-${posRef.current}px)`;
-      }
-
-      /* Center-focus: find image closest to viewport center and scale it up */
-      const wrapRect = wrap.getBoundingClientRect();
-      const centerX  = wrapRect.left + wrapRect.width / 2;
-      const items    = track.children;
-
-      let minDist   = Infinity;
-      let centerIdx = -1;
-      for (let i = 0; i < items.length; i++) {
-        const rect   = items[i].getBoundingClientRect();
-        const itemCX = rect.left + rect.width / 2;
-        const dist   = Math.abs(itemCX - centerX);
-        if (dist < minDist) { minDist = dist; centerIdx = i; }
-      }
-
-      if (centerIdx !== prevCenter.current) {
-        if (prevCenter.current >= 0 && items[prevCenter.current]) {
-          items[prevCenter.current].style.transform  = 'scale(1)';
-          items[prevCenter.current].style.zIndex     = '1';
-          items[prevCenter.current].style.boxShadow  = '0 4px 14px rgba(0,0,0,0.08)';
-        }
-        if (centerIdx >= 0 && items[centerIdx]) {
-          items[centerIdx].style.transform  = 'scale(1.5)';
-          items[centerIdx].style.zIndex     = '10';
-          items[centerIdx].style.boxShadow  = '0 20px 60px rgba(0,0,0,0.22), 0 0 0 4px #fff';
-        }
-        prevCenter.current = centerIdx;
-      }
-
+      posRef.current += SPEED;
+      if (posRef.current >= SET_W * 3) posRef.current = SET_W;
+      track.style.transform = `translateX(-${posRef.current}px)`;
       rafRef.current = requestAnimationFrame(tick);
     };
 
     rafRef.current = requestAnimationFrame(tick);
 
-    const onEnter = () => { paused.current = true;  };
-    const onLeave = () => { paused.current = false; };
-    wrap.addEventListener('mouseenter', onEnter);
-    wrap.addEventListener('mouseleave', onLeave);
-    return () => {
-      cancelAnimationFrame(rafRef.current);
-      wrap.removeEventListener('mouseenter', onEnter);
-      wrap.removeEventListener('mouseleave', onLeave);
-    };
+    return () => cancelAnimationFrame(rafRef.current);
   }, []);
 
   return (
@@ -113,20 +68,34 @@ export default function GallerySection() {
           style={{ display: 'flex', alignItems: 'center', gap: GAP, willChange: 'transform' }}
         >
           {TRACK_IMAGES.map((img, i) => (
-            <div key={i} style={{
-              flexShrink:      0,
-              width:           ITEM_W,
-              height:          ITEM_H,
-              borderRadius:    20,
-              overflow:        'hidden',
-              boxShadow:       '0 4px 14px rgba(0,0,0,0.08)',
-              transform:       'scale(1)',
-              transition:      'transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease',
-              transformOrigin: 'center center',
-              zIndex:          1,
-            }}>
+            <div
+              key={i}
+              style={{
+                flexShrink:      0,
+                width:           ITEM_W,
+                height:          ITEM_H,
+                borderRadius:    20,
+                overflow:        'hidden',
+                boxShadow:       '0 4px 14px rgba(0,0,0,0.08)',
+                transform:       'scale(1)',
+                transition:      'transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.35s ease',
+                transformOrigin: 'center center',
+                zIndex:          1,
+                cursor:          'pointer',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'scale(1.25)';
+                e.currentTarget.style.boxShadow = '0 20px 48px rgba(0,0,0,0.22)';
+                e.currentTarget.style.zIndex    = '10';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.boxShadow = '0 4px 14px rgba(0,0,0,0.08)';
+                e.currentTarget.style.zIndex    = '1';
+              }}
+            >
               <img src={img.url} alt={img.alt}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', pointerEvents: 'none' }} />
             </div>
           ))}
         </div>

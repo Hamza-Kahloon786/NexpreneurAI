@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { adminLoginAPI } from '@/services/api';
 import { gradients, colors } from '@/constants/colors';
+import logo from '@/components/Logo/logo.jpeg';
 
 export default function AdminLogin() {
   const navigate = useNavigate();
@@ -51,20 +52,11 @@ export default function AdminLogin() {
       }}>
         {/* Logo / title */}
         <div style={{ textAlign: 'center', marginBottom: 36 }}>
-          <div style={{
-            width:          52,
-            height:         52,
-            background:     colors.authBtn,
-            borderRadius:   14,
-            display:        'flex',
-            alignItems:     'center',
-            justifyContent: 'center',
-            margin:         '0 auto 16px',
-          }}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            </svg>
-          </div>
+          <img
+            src={logo}
+            alt="NexpreneurAI"
+            style={{ width: 72, height: 72, borderRadius: 18, objectFit: 'cover', margin: '0 auto 16px', display: 'block', boxShadow: '0 4px 16px rgba(100,80,180,0.18)' }}
+          />
           <h1 style={{ fontSize: 22, fontWeight: 700, color: colors.dark, margin: '0 0 6px' }}>Admin Panel</h1>
           <p style={{ fontSize: 13.5, color: colors.muted, margin: 0 }}>Sign in with your admin credentials</p>
         </div>
