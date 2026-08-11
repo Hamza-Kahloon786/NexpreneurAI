@@ -142,10 +142,10 @@ const WHAT_YOU_NEED_ICONS = [RawMaterialsIcon, ToolsIcon, BrandingIcon, Operatio
 const BRANDING_ICONS      = [VibeIcon, PaletteIcon, NamesIcon, PackagingIcon];
 
 const AI_TOOLS = [
-  { name: 'AI Photo Generator',         desc: 'Generate professional product images',  btn: 'Generate photos',       Icon: PhotoIcon,      route: '/dashboard' },
-  { name: 'Product Description Generator', desc: 'Create engaging product listings',    btn: 'Generate descriptions', Icon: DocIcon,         route: '/business-plan' },
-  { name: 'AI Pricing Tool',             desc: 'Optimize pricing for profit',           btn: 'Analyze pricing',       Icon: TagIcon,         route: '/dashboard' },
-  { name: 'Marketing Post Generator',   desc: 'Create social media captions',          btn: 'Create posts',          Icon: MegaphoneIcon,   route: '/dashboard' },
+  { name: 'AI Photo Generator',            desc: 'Generate professional product images', btn: 'Generate photos',       Icon: PhotoIcon,    route: null },
+  { name: 'Product Description Generator', desc: 'Create engaging product listings',     btn: 'Generate descriptions', Icon: DocIcon,      route: '/product-description' },
+  { name: 'AI Pricing Tool',               desc: 'Optimize pricing for profit',          btn: 'Analyze pricing',       Icon: TagIcon,      route: null },
+  { name: 'Marketing Post Generator',      desc: 'Create social media captions',         btn: 'Create posts',          Icon: MegaphoneIcon,route: null },
 ];
 
 /* ══════════════════════════════════════════════════
@@ -345,32 +345,46 @@ function AIToolsSection({ navigate }) {
   );
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-      {AI_TOOLS.map(({ name, desc, btn, Icon, route }) => (
-        <div key={name} style={{ position: 'relative', background: '#fafafa', borderRadius: 14, padding: '20px 20px 16px',
-          border: '1.5px solid #ede9f8', overflow: 'hidden', transition: 'transform 0.2s, box-shadow 0.2s' }}
-          onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(124,92,204,0.1)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}>
-          <DotPattern />
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
-            <div style={{ width: 38, height: 38, borderRadius: 10, background: '#fff', border: '1.5px solid #ede9f8',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <Icon />
+      {AI_TOOLS.map(({ name, desc, btn, Icon, route }) => {
+        const active = route !== null;
+        return (
+          <div key={name} style={{ position: 'relative', background: active ? '#fafafa' : '#f9f9fc', borderRadius: 14,
+            padding: '20px 20px 16px', border: '1.5px solid #ede9f8', overflow: 'hidden',
+            transition: 'transform 0.2s, box-shadow 0.2s', opacity: active ? 1 : 0.72 }}
+            onMouseEnter={(e) => { if (active) { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(124,92,204,0.1)'; } }}
+            onMouseLeave={(e) => { if (active) { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; } }}>
+            <DotPattern />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
+              <div style={{ width: 38, height: 38, borderRadius: 10, background: '#fff', border: '1.5px solid #ede9f8',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <Icon />
+              </div>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <h4 style={{ fontSize: 14, fontWeight: 700, color: colors.dark }}>{name}</h4>
+                  {!active && (
+                    <span style={{ fontSize: 10, fontWeight: 600, color: '#9ca3af', background: '#f3f4f6',
+                      border: '1px solid #e5e7eb', borderRadius: 99, padding: '2px 7px', letterSpacing: '0.04em' }}>
+                      Coming Soon
+                    </span>
+                  )}
+                </div>
+                <p style={{ fontSize: 12, color: colors.muted, marginTop: 2 }}>{desc}</p>
+              </div>
             </div>
-            <div>
-              <h4 style={{ fontSize: 14, fontWeight: 700, color: colors.dark }}>{name}</h4>
-              <p style={{ fontSize: 12, color: colors.muted, marginTop: 2 }}>{desc}</p>
-            </div>
+            <button
+              onClick={active ? () => navigate(route) : undefined}
+              disabled={!active}
+              style={{ background: active ? colors.authBtn : '#e5e7eb', color: active ? 'white' : '#9ca3af',
+                border: 'none', borderRadius: 8, padding: '8px 16px', fontSize: 12.5, fontWeight: 600,
+                cursor: active ? 'pointer' : 'not-allowed', marginTop: 8, transition: 'background 0.18s, transform 0.15s' }}
+              onMouseEnter={(e) => { if (active) { e.currentTarget.style.background = '#3d3870'; e.currentTarget.style.transform = 'scale(1.03)'; } }}
+              onMouseLeave={(e) => { if (active) { e.currentTarget.style.background = colors.authBtn; e.currentTarget.style.transform = 'scale(1)'; } }}>
+              {btn}
+            </button>
           </div>
-          <button onClick={() => navigate(route)}
-            style={{ background: colors.authBtn, color: 'white', border: 'none', borderRadius: 8,
-              padding: '8px 16px', fontSize: 12.5, fontWeight: 600, cursor: 'pointer', marginTop: 8,
-              transition: 'background 0.18s, transform 0.15s' }}
-            onMouseEnter={(e) => { e.currentTarget.style.background = '#3d3870'; e.currentTarget.style.transform = 'scale(1.03)'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.background = colors.authBtn; e.currentTarget.style.transform = 'scale(1)'; }}>
-            {btn}
-          </button>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
@@ -512,12 +526,16 @@ export default function BusinessPlanResult() {
                 onMouseLeave={(e) => { e.currentTarget.style.background = colors.authBtn; e.currentTarget.style.transform = 'translateY(0)'; }}>
                 Use AI Tools
               </button>
-              <button onClick={() => navigate('/home')}
-                style={{ background: '#fff', color: colors.dark, border: '1.5px solid #d1d5db',
-                  borderRadius: 99, padding: '11px 28px', fontSize: 14, fontWeight: 500, cursor: 'pointer', transition: 'all 0.2s' }}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = colors.purple; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#d1d5db'; e.currentTarget.style.transform = 'translateY(0)'; }}>
+              <button
+                disabled
+                style={{ background: '#fff', color: '#9ca3af', border: '1.5px solid #e5e7eb',
+                  borderRadius: 99, padding: '11px 28px', fontSize: 14, fontWeight: 500,
+                  cursor: 'not-allowed', display: 'flex', alignItems: 'center', gap: 8 }}>
                 Visit Learning Hub
+                <span style={{ fontSize: 10, fontWeight: 600, background: '#f3f4f6', border: '1px solid #e5e7eb',
+                  borderRadius: 99, padding: '2px 7px', letterSpacing: '0.04em', color: '#9ca3af' }}>
+                  Coming Soon
+                </span>
               </button>
             </div>
           </div>

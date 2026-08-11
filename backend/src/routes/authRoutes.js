@@ -2,7 +2,8 @@ const express  = require('express');
 const jwt      = require('jsonwebtoken');
 const passport = require('../config/passport');
 const User     = require('../models/User');
-const { protect } = require('../middleware/authMiddleware');
+const { protect }          = require('../middleware/authMiddleware');
+const { sendWelcomeEmail } = require('../services/mailer');
 
 const router = express.Router();
 
@@ -29,6 +30,11 @@ router.post('/register', async (req, res) => {
 
     const user  = await User.create({ name, email, password });
     const token = signToken(user._id);
+
+    /* fire-and-forget welcome email — registration still succeeds if email fails */
+    sendWelcomeEmail({ name, email }).catch((err) =>
+      console.error('Welcome email error:', err.message)
+    );
 
     res.status(201).json({ token, user });
   } catch (err) {

@@ -1,52 +1,55 @@
-import { useNavigate } from 'react-router-dom';
-import DashboardNavbar from '@/components/DashboardNavbar/DashboardNavbar';
-import Footer          from '@/components/Footer/Footer';
-import { gradients, colors } from '@/constants/colors';
+import { useState, useEffect } from 'react';
+import { useNavigate }         from 'react-router-dom';
+import DashboardNavbar         from '@/components/DashboardNavbar/DashboardNavbar';
+import Footer                  from '@/components/Footer/Footer';
+import { gradients, colors }   from '@/constants/colors';
+import { useAuth }             from '@/context/AuthContext';
+import {
+  getProgressStatsAPI,
+  getProgressRecentAPI,
+  getProgressChartAPI,
+} from '@/services/api';
 
-/* ── Chart data ─────────────────────────────────── */
-const CHART_DATA = [
-  { label: ['Jan', 'Week 1'], value: 2  },
-  { label: ['Jan', 'Week 2'], value: 4  },
-  { label: ['Jan', 'Week 3'], value: 4  },
-  { label: ['Jan', 'Week 4'], value: 8  },
-  { label: ['Feb', 'Week 1'], value: 8  },
-  { label: ['Feb', 'Week 2'], value: 16 },
-  { label: ['Feb', 'Week 3'], value: 11 },
-  { label: ['Feb', 'Week 4'], value: 15 },
-  { label: ['Mar', 'Week 1'], value: 13 },
-  { label: ['Mar', 'Week 2'], value: 21 },
-];
+/* ── Helpers ─────────────────────────────────────── */
+function timeAgo(dateStr) {
+  const secs = Math.floor((Date.now() - new Date(dateStr)) / 1000);
+  if (secs < 60)   return 'just now';
+  if (secs < 3600) return `${Math.floor(secs / 60)}m ago`;
+  if (secs < 86400) return `${Math.floor(secs / 3600)}h ago`;
+  const days = Math.floor(secs / 86400);
+  return days === 1 ? 'yesterday' : `${days}d ago`;
+}
 
-const Y_TICKS   = [5, 10, 15, 20, 25];
-const MAX_Y     = 26;
+/* ── SVG Line Chart ──────────────────────────────── */
 const PAD_LEFT  = 56;
 const PAD_RIGHT = 24;
 const PAD_TOP   = 20;
 const PAD_BOT   = 52;
 
-/* ── SVG Line Chart ─────────────────────────────── */
-function LineChart() {
+function LineChart({ data }) {
   const W = 860, H = 300;
   const plotW = W - PAD_LEFT - PAD_RIGHT;
   const plotH = H - PAD_TOP  - PAD_BOT;
 
-  const xOf = (i) => PAD_LEFT + (i / (CHART_DATA.length - 1)) * plotW;
+  const maxVal = Math.max(4, ...data.map((d) => d.value));
+  const MAX_Y  = Math.ceil((maxVal + 1) / 4) * 4 + 2;
+  const step   = Math.ceil(MAX_Y / 5);
+  const Y_TICKS = [step, step * 2, step * 3, step * 4, step * 5];
+
+  const xOf = (i) => PAD_LEFT + (i / (data.length - 1)) * plotW;
   const yOf = (v) => PAD_TOP  + (1 - v / MAX_Y) * plotH;
 
-  const points = CHART_DATA.map((d, i) => ({ x: xOf(i), y: yOf(d.value) }));
+  const points   = data.map((d, i) => ({ x: xOf(i), y: yOf(d.value) }));
+  const gridY    = PAD_TOP + plotH;
 
-  /* smooth line using cubic bezier */
   const linePath = points.reduce((acc, pt, i) => {
     if (i === 0) return `M ${pt.x} ${pt.y}`;
     const prev = points[i - 1];
-    const cpX = (prev.x + pt.x) / 2;
+    const cpX  = (prev.x + pt.x) / 2;
     return `${acc} C ${cpX} ${prev.y} ${cpX} ${pt.y} ${pt.x} ${pt.y}`;
   }, '');
 
-  /* filled area */
-  const areaPath = `${linePath} L ${points[points.length - 1].x} ${PAD_TOP + plotH} L ${points[0].x} ${PAD_TOP + plotH} Z`;
-
-  const gridY = PAD_TOP + plotH; // bottom of plot
+  const areaPath = `${linePath} L ${points[points.length - 1].x} ${gridY} L ${points[0].x} ${gridY} Z`;
 
   return (
     <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{ display: 'block', overflow: 'visible' }}>
@@ -56,14 +59,11 @@ function LineChart() {
         return (
           <g key={tick}>
             <line x1={PAD_LEFT} y1={y} x2={W - PAD_RIGHT} y2={y}
-              stroke="#e5e7eb" strokeWidth="1" strokeDasharray="0" />
-            <text x={PAD_LEFT - 8} y={y + 4} textAnchor="end"
-              fontSize="11" fill="#9ca3af">{tick}</text>
+              stroke="#e5e7eb" strokeWidth="1" />
+            <text x={PAD_LEFT - 8} y={y + 4} textAnchor="end" fontSize="11" fill="#9ca3af">{tick}</text>
           </g>
         );
       })}
-      {/* top label 25+ */}
-      <text x={PAD_LEFT - 8} y={PAD_TOP + 4} textAnchor="end" fontSize="11" fill="#9ca3af">25+</text>
 
       {/* Y-axis label */}
       <text transform={`translate(14, ${PAD_TOP + plotH / 2}) rotate(-90)`}
@@ -81,7 +81,8 @@ function LineChart() {
       <path d={areaPath} fill="url(#areaGrad)" opacity="0.5" />
 
       {/* line */}
-      <path d={linePath} fill="none" stroke={colors.authBtn} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d={linePath} fill="none" stroke={colors.authBtn} strokeWidth="2"
+        strokeLinecap="round" strokeLinejoin="round" />
 
       {/* data points */}
       {points.map((pt, i) => (
@@ -90,7 +91,7 @@ function LineChart() {
       ))}
 
       {/* X-axis labels */}
-      {CHART_DATA.map((d, i) => {
+      {data.map((d, i) => {
         const x = xOf(i);
         return (
           <g key={i}>
@@ -100,12 +101,10 @@ function LineChart() {
         );
       })}
 
-      {/* X-axis title */}
       <text x={PAD_LEFT + plotW / 2} y={H - 2} textAnchor="middle" fontSize="11.5" fill="#6b7280" fontWeight="500">
         Months / Weeks
       </text>
 
-      {/* gradient definition */}
       <defs>
         <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%"   stopColor={colors.authBtn} stopOpacity="0.18" />
@@ -116,8 +115,8 @@ function LineChart() {
   );
 }
 
-/* ── Stat Card ──────────────────────────────────── */
-function StatCard({ label, value, valueColor, glow }) {
+/* ── Stat Card ───────────────────────────────────── */
+function StatCard({ label, value, valueColor, glow, loading }) {
   return (
     <div style={{
       flex:           1,
@@ -136,14 +135,43 @@ function StatCard({ label, value, valueColor, glow }) {
       justifyContent: 'center',
     }}>
       <p style={{ fontSize: 13, color: colors.muted, marginBottom: 10, fontWeight: 500 }}>{label}</p>
-      <p style={{ fontSize: 36, fontWeight: 700, color: valueColor || colors.dark, lineHeight: 1 }}>{value}</p>
+      {loading
+        ? <div style={{ width: 64, height: 36, borderRadius: 8, background: '#f3f4f6', animation: 'pulse 1.4s ease-in-out infinite' }} />
+        : <p style={{ fontSize: 36, fontWeight: 700, color: valueColor || colors.dark, lineHeight: 1 }}>{value}</p>
+      }
     </div>
   );
 }
 
-/* ── Main Page ──────────────────────────────────── */
+/* ── Main Page ───────────────────────────────────── */
 export default function MyProgress() {
-  const navigate = useNavigate();
+  const navigate   = useNavigate();
+  const { token }  = useAuth();
+
+  const [stats,    setStats]    = useState(null);
+  const [chart,    setChart]    = useState(null);
+  const [recent,   setRecent]   = useState(null);
+  const [loading,  setLoading]  = useState(true);
+  const [error,    setError]    = useState('');
+
+  useEffect(() => {
+    if (!token) return;
+    setLoading(true);
+
+    Promise.all([
+      getProgressStatsAPI(token),
+      getProgressChartAPI(token),
+      getProgressRecentAPI(token),
+    ])
+      .then(([s, c, r]) => {
+        if (s.message) throw new Error(s.message);
+        setStats(s);
+        setChart(Array.isArray(c) ? c : null);
+        setRecent(Array.isArray(r) ? r : []);
+      })
+      .catch((err) => setError(err.message || 'Failed to load progress data.'))
+      .finally(() => setLoading(false));
+  }, [token]);
 
   return (
     <div style={{ minHeight: '100vh', background: gradients.hero, display: 'flex', flexDirection: 'column' }}>
@@ -161,11 +189,29 @@ export default function MyProgress() {
           </p>
         </div>
 
+        {error && (
+          <p style={{ textAlign: 'center', fontSize: 14, color: '#ef4444', marginBottom: 32 }}>{error}</p>
+        )}
+
         {/* ── Stat Cards ─────────────────────────── */}
-        <div style={{ display: 'flex', gap: 16, marginBottom: 44 }}>
-          <StatCard label="AI Tasks Completed" value="24" />
-          <StatCard label="Time saved using AI" value="9.5 hrs" valueColor="#16a34a" glow />
-          <StatCard label="Products created"    value="3" />
+        <div style={{ display: 'flex', gap: 16, marginBottom: 44, flexWrap: 'wrap' }}>
+          <StatCard
+            label="AI Tasks Completed"
+            value={stats ? String(stats.totalTasks) : '—'}
+            loading={loading}
+          />
+          <StatCard
+            label="Time saved using AI"
+            value={stats ? stats.timeSaved : '—'}
+            valueColor="#16a34a"
+            glow
+            loading={loading}
+          />
+          <StatCard
+            label="Products created"
+            value={stats ? String(stats.productsCreated) : '—'}
+            loading={loading}
+          />
         </div>
 
         {/* ── Chart ──────────────────────────────── */}
@@ -180,7 +226,17 @@ export default function MyProgress() {
             border:       '1.5px solid rgba(200,195,225,0.4)',
             boxShadow:    '0 2px 12px rgba(100,80,180,0.05)',
           }}>
-            <LineChart />
+            {loading ? (
+              <div style={{ height: 200, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <p style={{ color: colors.muted, fontSize: 14 }}>Loading chart…</p>
+              </div>
+            ) : chart ? (
+              <LineChart data={chart} />
+            ) : (
+              <div style={{ height: 200, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <p style={{ color: colors.muted, fontSize: 14 }}>No chart data available.</p>
+              </div>
+            )}
           </div>
         </div>
 
@@ -196,21 +252,37 @@ export default function MyProgress() {
           <h2 style={{ fontSize: 18, fontWeight: 600, color: colors.dark, marginBottom: 20 }}>
             Recent Activity
           </h2>
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 14 }}>
-            {[
-              'Generated product photos',
-              'Created Instagram post',
-              'Updated pricing strategy',
-            ].map((item) => (
-              <li key={item} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 14.5, color: '#374151' }}>
-                <span style={{
-                  width: 7, height: 7, borderRadius: '50%',
-                  background: colors.purple, flexShrink: 0,
+          {loading ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              {[0, 1, 2].map((i) => (
+                <div key={i} style={{
+                  height: 20, borderRadius: 6, background: '#f3f4f6',
+                  width: `${60 + i * 15}%`, animation: 'pulse 1.4s ease-in-out infinite',
                 }} />
-                {item}
-              </li>
-            ))}
-          </ul>
+              ))}
+            </div>
+          ) : recent && recent.length > 0 ? (
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 14 }}>
+              {recent.map((item, i) => (
+                <li key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 14.5, color: '#374151' }}>
+                    <span style={{
+                      width: 7, height: 7, borderRadius: '50%',
+                      background: colors.purple, flexShrink: 0,
+                    }} />
+                    {item.label}
+                  </div>
+                  <span style={{ fontSize: 12, color: colors.muted, flexShrink: 0 }}>
+                    {timeAgo(item.createdAt)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p style={{ fontSize: 14, color: colors.muted, textAlign: 'center', padding: '16px 0' }}>
+              No activity yet — generate a business plan or product description to get started.
+            </p>
+          )}
         </div>
 
         {/* ── CTA ────────────────────────────────── */}
@@ -225,7 +297,7 @@ export default function MyProgress() {
           <h3 style={{ fontSize: 24, fontWeight: 600, color: colors.dark, marginBottom: 28, letterSpacing: '-0.01em' }}>
             Keep going, every step moves your business forward
           </h3>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, flexWrap: 'wrap' }}>
             <button onClick={() => navigate('/dashboard')}
               style={{
                 background: colors.authBtn, color: '#fff', border: 'none',
@@ -253,6 +325,13 @@ export default function MyProgress() {
       </main>
 
       <Footer />
+
+      <style>{`
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50%       { opacity: 0.45; }
+        }
+      `}</style>
     </div>
   );
 }

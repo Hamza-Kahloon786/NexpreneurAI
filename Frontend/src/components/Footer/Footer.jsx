@@ -78,23 +78,30 @@ export default function Footer() {
           }}>
             {FOOTER_LINKS.map((col, ci) => (
               <div key={ci} style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
-                {col.map((link) => (
-                  <a
-                    key={link}
-                    href="#"
-                    style={{
-                      fontSize:   15,
-                      fontWeight: 400,
-                      color:      'rgba(255,255,255,0.88)',
-                      transition: 'color 0.18s, transform 0.18s',
-                      display:    'inline-block',
-                    }}
-                    onMouseEnter={(e) => { e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.transform = 'translateX(4px)'; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.88)'; e.currentTarget.style.transform = 'translateX(0)'; }}
-                  >
-                    {link}
-                  </a>
-                ))}
+                {col.map(({ label, route, url }) => {
+                  const isClickable = route || url;
+                  return (
+                    <span
+                      key={label}
+                      onClick={() => {
+                        if (route) navigate(route);
+                        else if (url) window.open(url, '_blank', 'noopener,noreferrer');
+                      }}
+                      style={{
+                        fontSize:   15,
+                        fontWeight: 400,
+                        color:      isClickable ? 'rgba(255,255,255,0.88)' : 'rgba(255,255,255,0.45)',
+                        transition: 'color 0.18s, transform 0.18s',
+                        display:    'inline-block',
+                        cursor:     isClickable ? 'pointer' : 'default',
+                      }}
+                      onMouseEnter={(e) => { if (isClickable) { e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.transform = 'translateX(4px)'; } }}
+                      onMouseLeave={(e) => { if (isClickable) { e.currentTarget.style.color = 'rgba(255,255,255,0.88)'; e.currentTarget.style.transform = 'translateX(0)'; } }}
+                    >
+                      {label}
+                    </span>
+                  );
+                })}
               </div>
             ))}
           </div>

@@ -1,5 +1,6 @@
 const express     = require('express');
 const { protect } = require('../middleware/authMiddleware');
+const Activity    = require('../models/Activity');
 
 const router = express.Router();
 
@@ -59,6 +60,12 @@ Rules:
     if (!raw) return res.status(502).json({ message: 'Empty response. Please try again.' });
 
     const result = JSON.parse(raw);
+
+    Activity.create({
+      userId: req.user._id,
+      type:   'product_description',
+      label:  `Generated product description for "${product.trim()}"`,
+    }).catch((e) => console.error('Activity save error:', e.message));
 
     res.json({ product: product.trim(), description: result });
 

@@ -70,9 +70,20 @@ export const GALLERY_IMAGES = [
 ];
 
 export const FOOTER_LINKS = [
-  ['Home', 'Learning Hub', 'FAQs'],
-  ['X/Twitter', 'Instagram', 'LinkedIn'],
-  ['Terms of Use', 'Privacy Policy'],
+  [
+    { label: 'Home',         route: '/home' },
+    { label: 'Learning Hub', route: null    },
+    { label: 'FAQs',         route: '/help-support' },
+  ],
+  [
+    { label: 'X/Twitter', url: null },
+    { label: 'Instagram', url: null },
+    { label: 'LinkedIn',  url: null },
+  ],
+  [
+    { label: 'Terms of Use',   route: null },
+    { label: 'Privacy Policy', route: null },
+  ],
 ];
 
 export const AUTH_CHECKLIST = [

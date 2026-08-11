@@ -62,3 +62,13 @@ export const adminDeleteUserAPI = (token, id) =>
     method:  'DELETE',
     headers: headers(token),
   }).then((r) => r.json());
+
+/* ── Progress ─────────────────────────────────── */
+export const getProgressStatsAPI = (token) =>
+  fetch(`${BASE}/progress/stats`, { headers: headers(token) }).then((r) => r.json());
+
+export const getProgressRecentAPI = (token) =>
+  fetch(`${BASE}/progress/recent`, { headers: headers(token) }).then((r) => r.json());
+
+export const getProgressChartAPI = (token) =>
+  fetch(`${BASE}/progress/chart`, { headers: headers(token) }).then((r) => r.json());
