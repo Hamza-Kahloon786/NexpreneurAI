@@ -8,7 +8,7 @@ const NAV_ITEMS = [
   { label: 'Dashboard',    route: '/dashboard' },
   { label: 'Business Plan', route: '/business-plan' },
   { label: 'My Progress',  route: '/my-progress' },
-  { label: 'Learning Hub', route: '/dashboard' },
+  { label: 'Learning Hub', route: null },
 ];
 
 export default function DashboardNavbar() {
@@ -21,10 +21,10 @@ export default function DashboardNavbar() {
   const initials = user?.name ? user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 'U';
 
   const AI_TOOL_ITEMS = [
-    { label: 'AI Photo Generator',     route: '/dashboard' },
     { label: 'AI Product Description', route: '/product-description' },
-    { label: 'AI Price Suggestions',   route: '/dashboard' },
-    { label: 'AI Marketing',           route: '/dashboard' },
+    { label: 'AI Photo Generator',     route: null },
+    { label: 'AI Price Suggestions',   route: null },
+    { label: 'AI Marketing',           route: null },
   ];
 
   return (
@@ -34,7 +34,7 @@ export default function DashboardNavbar() {
       <div className="flex items-center justify-between mx-auto"
         style={{ maxWidth: 1200, padding: '0 32px', height: 64 }}>
 
-        <button onClick={() => navigate('/dashboard')}
+        <button onClick={() => navigate('/home')}
           style={{ background: 'none', border: 'none', padding: 0, transition: 'transform 0.2s' }}
           onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.08)')}
           onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}>
@@ -44,10 +44,14 @@ export default function DashboardNavbar() {
         <div className="flex items-center" style={{ gap: 4 }}>
           {NAV_ITEMS.map(({ label, route }) => (
             <a key={label} href="#" className="nav-link"
-              style={{ padding: '6px 12px', borderRadius: 8, fontSize: 13.5 }}
-              onClick={(e) => { e.preventDefault(); navigate(route); }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(124,92,204,0.07)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}>
+              style={{
+                padding: '6px 12px', borderRadius: 8, fontSize: 13.5,
+                cursor: route ? 'pointer' : 'default',
+                color:  route ? undefined : '#9ca3af',
+              }}
+              onClick={(e) => { e.preventDefault(); if (route) navigate(route); }}
+              onMouseEnter={(e) => { if (route) e.currentTarget.style.background = 'rgba(124,92,204,0.07)'; }}
+              onMouseLeave={(e) => { if (route) e.currentTarget.style.background = 'transparent'; }}>
               {label}
             </a>
           ))}
@@ -69,11 +73,16 @@ export default function DashboardNavbar() {
                 background: '#fff', borderRadius: 12, padding: '8px 0',
                 boxShadow: '0 8px 32px rgba(0,0,0,0.12)', border: '1px solid #f0eef8', zIndex: 100 }}>
                 {AI_TOOL_ITEMS.map(({ label, route }) => (
-                  <button key={label} onClick={() => { navigate(route); setAiOpen(false); }}
-                    style={{ display: 'block', width: '100%', textAlign: 'left', padding: '10px 18px',
-                      background: 'none', border: 'none', fontSize: 13, color: '#374151', transition: 'background 0.15s' }}
-                    onMouseEnter={(e) => (e.currentTarget.style.background = '#f5f3ff')}
-                    onMouseLeave={(e) => (e.currentTarget.style.background = 'none')}>
+                  <button key={label}
+                    onClick={() => { if (route) { navigate(route); setAiOpen(false); } }}
+                    style={{
+                      display: 'block', width: '100%', textAlign: 'left', padding: '10px 18px',
+                      background: 'none', border: 'none', fontSize: 13, transition: 'background 0.15s',
+                      color:  route ? '#374151' : '#9ca3af',
+                      cursor: route ? 'pointer'  : 'default',
+                    }}
+                    onMouseEnter={(e) => { if (route) e.currentTarget.style.background = '#f5f3ff'; }}
+                    onMouseLeave={(e) => { if (route) e.currentTarget.style.background = 'none'; }}>
                     {label}
                   </button>
                 ))}

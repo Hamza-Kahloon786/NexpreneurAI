@@ -243,20 +243,18 @@ export default function ProductDescriptionResult() {
           </h2>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 14, flexWrap: 'wrap' }}>
             {[
-              { label: 'Generate product photos', Icon: PhotoIcon,      route: '/dashboard' },
-              { label: 'Set pricing with AI',      Icon: PriceIcon,     route: '/dashboard' },
-              { label: 'Create marketing posts',   Icon: MarketingIcon, route: '/dashboard' },
-            ].map(({ label, Icon, route }) => (
-              <button key={label} onClick={() => navigate(route)}
+              { label: 'Generate product photos', Icon: PhotoIcon      },
+              { label: 'Set pricing with AI',      Icon: PriceIcon     },
+              { label: 'Create marketing posts',   Icon: MarketingIcon },
+            ].map(({ label, Icon }) => (
+              <button key={label} disabled
                 style={{
                   display: 'flex', alignItems: 'center', gap: 9,
-                  background: colors.authBtn, color: '#fff',
+                  background: '#e5e7eb', color: '#9ca3af',
                   border: 'none', borderRadius: 99, padding: '13px 24px',
-                  fontSize: 14, fontWeight: 600, cursor: 'pointer',
-                  transition: 'all 0.18s', boxShadow: '0 4px 14px rgba(45,42,78,0.18)',
+                  fontSize: 14, fontWeight: 600, cursor: 'not-allowed',
+                  boxShadow: 'none',
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = '#3d3870'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = colors.authBtn; e.currentTarget.style.transform = 'translateY(0)'; }}
               >
                 <Icon /> {label}
               </button>

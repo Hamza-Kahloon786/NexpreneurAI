@@ -1,5 +1,6 @@
 const express     = require('express');
 const { protect } = require('../middleware/authMiddleware');
+const Activity    = require('../models/Activity');
 
 const router = express.Router();
 
@@ -111,6 +112,12 @@ Rules:
     if (!raw) return res.status(502).json({ message: 'Empty response. Please try again.' });
 
     const plan = JSON.parse(raw);
+
+    Activity.create({
+      userId: req.user._id,
+      type:   'business_plan',
+      label:  `Generated business plan for "${idea.trim()}"`,
+    }).catch((e) => console.error('Activity save error:', e.message));
 
     res.json({ idea: idea.trim(), plan });
 
