@@ -1,7 +1,9 @@
-import { useNavigate } from 'react-router-dom';
-import DashboardNavbar from '@/components/DashboardNavbar/DashboardNavbar';
-import { useAuth }     from '@/context/AuthContext';
-import { gradients, colors } from '@/constants/colors';
+import { useState, useEffect } from 'react';
+import { useNavigate }         from 'react-router-dom';
+import DashboardNavbar          from '@/components/DashboardNavbar/DashboardNavbar';
+import { useAuth }              from '@/context/AuthContext';
+import { gradients, colors }    from '@/constants/colors';
+import { getProgressStatsAPI }  from '@/services/api';
 
 const PhotoIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
@@ -31,7 +33,7 @@ const MegaphoneIcon = () => (
 const AI_TOOLS = [
   { label: 'AI Photo Generator',     Icon: PhotoIcon,    route: '/dashboard' },
   { label: 'AI Product Description', Icon: DocIcon,      route: '/product-description' },
-  { label: 'AI Price Suggestions',   Icon: TagIcon,      route: '/dashboard' },
+  { label: 'AI Price Suggestions',   Icon: TagIcon,      route: '/price-suggestions' },
   { label: 'AI Marketing',           Icon: MegaphoneIcon,route: '/dashboard' },
 ];
 
@@ -74,8 +76,19 @@ function ActionBtn({ children, onClick }) {
 
 export default function Dashboard() {
   const navigate    = useNavigate();
-  const { user }    = useAuth();
+  const { user, token } = useAuth();
   const firstName   = user?.name?.split(' ')[0] || 'there';
+
+  const [stats,        setStats]        = useState(null);
+  const [statsLoading, setStatsLoading] = useState(true);
+
+  useEffect(() => {
+    if (!token) return;
+    getProgressStatsAPI(token)
+      .then((data) => { if (!data.message) setStats(data); })
+      .catch(() => {})
+      .finally(() => setStatsLoading(false));
+  }, [token]);
 
   return (
     <div style={{ minHeight: '100vh', background: gradients.hero }}>
@@ -135,15 +148,24 @@ export default function Dashboard() {
           <Card className="anim-fade-in-up delay-200">
             <h2 style={{ fontSize: 20, fontWeight: 700, color: colors.dark, marginBottom: 18 }}>My Progress</h2>
             <div className="flex" style={{ gap: 12 }}>
-              {[{ value: '07', label: 'Tasks completed\nwith AI' }, { value: '3h', label: 'Time saved\nusing AI Tools' }].map(({ value, label }) => (
-                <div key={value} style={{ flex: 1, background: '#f8f7ff', border: '1.5px solid #e8e5f4', borderRadius: 12,
+              {[
+                {
+                  value: statsLoading ? '—' : String(stats?.totalTasks ?? 0).padStart(2, '0'),
+                  label: 'Tasks completed\nwith AI',
+                },
+                {
+                  value: statsLoading ? '—' : (stats?.timeSaved || '0 hrs').replace(' hrs', 'h'),
+                  label: 'Time saved\nusing AI Tools',
+                },
+              ].map(({ value, label }) => (
+                <div key={label} style={{ flex: 1, background: '#f8f7ff', border: '1.5px solid #e8e5f4', borderRadius: 12,
                   padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 12 }}>
                   <span style={{ fontSize: 26, fontWeight: 800, color: colors.dark }}>{value}</span>
                   <span style={{ fontSize: 11.5, color: colors.muted, lineHeight: 1.5, whiteSpace: 'pre-line' }}>{label}</span>
                 </div>
               ))}
             </div>
-            <ActionBtn onClick={() => {}}>See Complete Stats</ActionBtn>
+            <ActionBtn onClick={() => navigate('/my-progress')}>See Complete Stats</ActionBtn>
           </Card>
 
           {/* Learning Hub */}
