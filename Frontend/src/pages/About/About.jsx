@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar/Navbar';
 import { gradients, colors } from '@/constants/colors';
+import logoImg from '@/components/Logo/logo.jpeg';
 
 const PURPLE = colors.purple;       // #7c5ccc
 const DARK   = colors.dark;         // #1c1a2e
@@ -278,16 +279,11 @@ export default function About() {
 
           {/* Left */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-            <div style={{ width: 34, height: 34, borderRadius: 9, background: colors.authBtn,
-              display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round">
-                <rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/>
-                <rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>
-              </svg>
-            </div>
+            <img src={logoImg} alt="NexpreneurAI"
+              style={{ width: 40, height: 40, borderRadius: 10, objectFit: 'cover', flexShrink: 0 }} />
             <div>
               <p style={{ fontSize: 13, fontWeight: 700, color: DARK, marginBottom: 1 }}>NexpreneurAI</p>
-              <p style={{ fontSize: 11.5, color: MUTED }}>AI-Powered Business Guidance &nbsp;|&nbsp; info@nexpreneurai.com</p>
+              <p style={{ fontSize: 11.5, color: MUTED }}>AI-Powered Business Guidance &nbsp;|&nbsp; nexpreneurai@gmail.com</p>
             </div>
           </div>
 

@@ -65,16 +65,21 @@ export default function LanguageSelection() {
 
         {/* Row 1 — 6 languages */}
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 12, marginBottom: 12 }}>
-          {LANGUAGES.slice(0, 6).map((lang, i) => (
-            <button
-              key={lang.code}
-              className={`lang-btn anim-fade-in-up delay-${['100','150','200','250','300','350'][i]}${selected === lang.code ? ' selected' : ''}`}
-              onClick={() => setSelected(lang.code)}
-            >
-              <FlagImg code={lang.flagCode} name={lang.name} />
-              {lang.name}
-            </button>
-          ))}
+          {LANGUAGES.slice(0, 6).map((lang, i) => {
+            const isEnglish = lang.code === 'en';
+            return (
+              <button
+                key={lang.code}
+                className={`lang-btn anim-fade-in-up delay-${['100','150','200','250','300','350'][i]}${selected === lang.code ? ' selected' : ''}`}
+                onClick={() => isEnglish && setSelected(lang.code)}
+                style={!isEnglish ? { opacity: 0.42, cursor: 'not-allowed' } : {}}
+                title={!isEnglish ? 'Coming Soon' : undefined}
+              >
+                <FlagImg code={lang.flagCode} name={lang.name} />
+                {lang.name}
+              </button>
+            );
+          })}
         </div>
 
         {/* Row 2 — 4 languages */}
@@ -82,8 +87,9 @@ export default function LanguageSelection() {
           {LANGUAGES.slice(6).map((lang, i) => (
             <button
               key={lang.code}
-              className={`lang-btn anim-fade-in-up delay-${['400','500','400','500'][i]}${selected === lang.code ? ' selected' : ''}`}
-              onClick={() => setSelected(lang.code)}
+              className={`lang-btn anim-fade-in-up delay-${['400','500','400','500'][i]}`}
+              style={{ opacity: 0.42, cursor: 'not-allowed' }}
+              title="Coming Soon"
             >
               <FlagImg code={lang.flagCode} name={lang.name} />
               {lang.name}
