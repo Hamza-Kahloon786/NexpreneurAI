@@ -22,8 +22,8 @@ export default function DashboardNavbar() {
 
   const AI_TOOL_ITEMS = [
     { label: 'AI Product Description', route: '/product-description' },
+    { label: 'AI Price Suggestions',   route: '/price-suggestions' },
     { label: 'AI Photo Generator',     route: null },
-    { label: 'AI Price Suggestions',   route: null },
     { label: 'AI Marketing',           route: null },
   ];
 
