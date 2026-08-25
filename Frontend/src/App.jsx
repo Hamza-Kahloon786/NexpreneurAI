@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
+import ScrollToTop         from '@/components/ScrollToTop/ScrollToTop';
 import LanguageSelection   from '@/pages/LanguageSelection/LanguageSelection';
 import Home                from '@/pages/Home/Home';
 import SignIn              from '@/pages/SignIn/SignIn';
@@ -10,6 +11,8 @@ import BusinessPlanResult         from '@/pages/BusinessPlan/BusinessPlanResult'
 import ProductDescriptionInput    from '@/pages/ProductDescription/ProductDescriptionInput';
 import ProductDescriptionResult   from '@/pages/ProductDescription/ProductDescriptionResult';
 import MyProgress                 from '@/pages/MyProgress/MyProgress';
+import PriceSuggestionInput       from '@/pages/PriceSuggestions/PriceSuggestionInput';
+import PriceSuggestionResult      from '@/pages/PriceSuggestions/PriceSuggestionResult';
 import About                      from '@/pages/About/About';
 import HelpSupport                from '@/pages/HelpSupport/HelpSupport';
 import AdminLogin                 from '@/pages/Admin/AdminLogin';
@@ -23,6 +26,8 @@ const Protected = ({ children }) => (
 
 export default function App() {
   return (
+    <>
+    <ScrollToTop />
     <Routes>
       <Route path="/"                    element={<LanguageSelection />} />
       <Route path="/home"                element={<Home />} />
@@ -35,6 +40,8 @@ export default function App() {
       <Route path="/product-description"            element={<Protected><ProductDescriptionInput /></Protected>} />
       <Route path="/product-description/result"     element={<Protected><ProductDescriptionResult /></Protected>} />
       <Route path="/my-progress"                    element={<Protected><MyProgress /></Protected>} />
+      <Route path="/price-suggestions"              element={<Protected><PriceSuggestionInput /></Protected>} />
+      <Route path="/price-suggestions/result"       element={<Protected><PriceSuggestionResult /></Protected>} />
       <Route path="/about"                          element={<About />} />
       <Route path="/help-support"                   element={<HelpSupport />} />
       <Route path="/admin"                          element={<Navigate to="/admin/login" replace />} />
@@ -43,5 +50,6 @@ export default function App() {
       <Route path="/admin/users"                    element={<AdminUsers />} />
       <Route path="*"                               element={<Navigate to="/" replace />} />
     </Routes>
+    </>
   );
 }
