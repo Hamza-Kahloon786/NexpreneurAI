@@ -3,7 +3,6 @@ Frontend/node_modules/
 backend/node_modules/
 
 # Environment variables
-.env
 Frontend/.env
 backend/.env
 
@@ -32,3 +31,5 @@ coverage/
 branch_structure.json
 temp_auto_push.bat
 temp_interactive_push.bat
+config.bat
+node_modules

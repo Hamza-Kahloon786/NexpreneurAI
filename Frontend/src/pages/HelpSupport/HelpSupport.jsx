@@ -151,7 +151,7 @@ export default function HelpSupport() {
                   </svg>
                 ),
                 label: 'Email',
-                value: '*********',
+                value: 'nexpreneurai@gmail.com',
               },
               {
                 icon: (
@@ -160,7 +160,7 @@ export default function HelpSupport() {
                   </svg>
                 ),
                 label: 'Phone',
-                value: '*********',
+                value: '***',
               },
               {
                 icon: (
@@ -169,7 +169,7 @@ export default function HelpSupport() {
                   </svg>
                 ),
                 label: 'LinkedIn',
-                value: '*********',
+                value: '***',
               },
               {
                 icon: (
