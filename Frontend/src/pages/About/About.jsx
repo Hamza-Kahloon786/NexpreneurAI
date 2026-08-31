@@ -1,7 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar/Navbar';
 import { gradients, colors } from '@/constants/colors';
-import logoImg from '@/components/Logo/logo.jpeg';
+import logoImg  from '@/components/Logo/logo.jpeg';
+import areejImg from '@/assets/areej.jpeg';
 
 const PURPLE = colors.purple;       // #7c5ccc
 const DARK   = colors.dark;         // #1c1a2e
@@ -110,9 +111,9 @@ export default function About() {
               <div style={{ width: 200, height: 200, borderRadius: '50%', overflow: 'hidden',
                 border: `3px solid rgba(124,92,204,0.35)`, boxShadow: '0 8px 32px rgba(124,92,204,0.15)' }}>
                 <img
-                  src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=400&q=80"
-                  alt="Areej"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  src={areejImg}
+                  alt="Areej Tahir"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 15%' }}
                 />
               </div>
               <div style={{ position: 'absolute', bottom: 10, right: 10, width: 36, height: 36,
