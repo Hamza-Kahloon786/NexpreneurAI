@@ -8,7 +8,24 @@ import {
   getProgressStatsAPI,
   getProgressRecentAPI,
   getProgressChartAPI,
+  getProgressActivityAPI,
 } from '@/services/api';
+
+/* Maps a saved activity back to the result page + router state it expects */
+const VIEW_TARGETS = {
+  business_plan: (i, r) => ({
+    path: '/business-plan/result',
+    state: { idea: i.idea, plan: r },
+  }),
+  product_description: (i, r) => ({
+    path: '/product-description/result',
+    state: { product: i.product, description: r },
+  }),
+  price_suggestion: (i, r) => ({
+    path: '/price-suggestions/result',
+    state: { product: i.product, condition: i.condition, currency: i.currency, suggestions: r },
+  }),
+};
 
 /* ── Helpers ─────────────────────────────────────── */
 function timeAgo(dateStr) {
@@ -153,6 +170,24 @@ export default function MyProgress() {
   const [recent,   setRecent]   = useState(null);
   const [loading,  setLoading]  = useState(true);
   const [error,    setError]    = useState('');
+  const [viewingId, setViewingId] = useState(null);
+  const [viewError, setViewError] = useState('');
+
+  const handleView = async (item) => {
+    if (viewingId) return;
+    setViewingId(item.id);
+    setViewError('');
+    try {
+      const data = await getProgressActivityAPI(token, item.id);
+      const target = VIEW_TARGETS[data.type];
+      if (data.message || !target) throw new Error(data.message || 'Unable to open this result.');
+      const { path, state } = target(data.input || {}, data.result);
+      navigate(path, { state });
+    } catch (err) {
+      setViewError(err.message || 'Unable to open this result.');
+      setViewingId(null);
+    }
+  };
 
   useEffect(() => {
     if (!token) return;
@@ -272,9 +307,28 @@ export default function MyProgress() {
                     }} />
                     {item.label}
                   </div>
-                  <span style={{ fontSize: 12, color: colors.muted, flexShrink: 0 }}>
-                    {timeAgo(item.createdAt)}
-                  </span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexShrink: 0 }}>
+                    <span style={{ fontSize: 12, color: colors.muted }}>
+                      {timeAgo(item.createdAt)}
+                    </span>
+                    {item.hasResult && (
+                      <button
+                        onClick={() => handleView(item)}
+                        disabled={!!viewingId}
+                        style={{
+                          background: 'none', border: '1.5px solid #d1d5db', borderRadius: 99,
+                          padding: '5px 16px', fontSize: 12.5, fontWeight: 600, color: colors.dark,
+                          cursor: viewingId ? 'not-allowed' : 'pointer',
+                          opacity: viewingId && viewingId !== item.id ? 0.5 : 1,
+                          transition: 'all 0.18s',
+                        }}
+                        onMouseEnter={(e) => { if (!viewingId) { e.currentTarget.style.borderColor = colors.purple; e.currentTarget.style.color = colors.purple; } }}
+                        onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#d1d5db'; e.currentTarget.style.color = colors.dark; }}
+                      >
+                        {viewingId === item.id ? 'Opening…' : 'View'}
+                      </button>
+                    )}
+                  </div>
                 </li>
               ))}
             </ul>
@@ -282,6 +336,9 @@ export default function MyProgress() {
             <p style={{ fontSize: 14, color: colors.muted, textAlign: 'center', padding: '16px 0' }}>
               No activity yet — generate a business plan or product description to get started.
             </p>
+          )}
+          {viewError && (
+            <p style={{ fontSize: 13, color: '#ef4444', textAlign: 'center', marginTop: 16 }}>{viewError}</p>
           )}
         </div>
 
