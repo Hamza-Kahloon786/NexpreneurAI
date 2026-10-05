@@ -158,7 +158,7 @@ export default function ProductDescriptionResult() {
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0, marginTop: 4 }}>
-            <button onClick={() => navigate('/product-description')}
+            <button onClick={() => navigate('/product-description', { state: { product } })}
               style={{
                 display: 'flex', alignItems: 'center', gap: 7,
                 background: 'none', border: '1.5px solid #d1d5db',

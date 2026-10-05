@@ -461,7 +461,7 @@ export default function BusinessPlanResult() {
               <span style={{ fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#888', fontSize: 11 }}>Based on your idea:{' '}</span>
               <span style={{ fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: colors.dark }}>{idea}</span>
             </p>
-            <button onClick={() => navigate('/business-plan')}
+            <button onClick={() => navigate('/business-plan', { state: { idea } })}
               style={{ background: 'none', border: 'none', display: 'flex', alignItems: 'center', gap: 5,
                 fontSize: 12.5, color: colors.purple, fontWeight: 600, whiteSpace: 'nowrap', flexShrink: 0, transition: 'opacity 0.18s' }}
               onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.7')}

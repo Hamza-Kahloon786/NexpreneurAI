@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import DashboardNavbar from '@/components/DashboardNavbar/DashboardNavbar';
 import Footer          from '@/components/Footer/Footer';
 import { gradients, colors } from '@/constants/colors';
@@ -76,12 +76,17 @@ function InfoChip({ topLabel, value }) {
 /* ── Main ───────────────────────────────────────── */
 export default function PriceSuggestionInput() {
   const navigate    = useNavigate();
+  const { state }   = useLocation();
   const { token }   = useAuth();
 
-  const [productKey,  setProductKey]  = useState('handmade-candle');
-  const [customLabel, setCustomLabel] = useState('');
-  const [condition,   setCondition]   = useState('New (handmade)');
-  const [currency,    setCurrency]    = useState(detectCurrency);
+  // Restore the previous input when coming back via "Edit input"
+  const prevProduct = state?.product;
+  const prevMatch   = PRODUCT_TYPES.find((p) => p.label === prevProduct);
+
+  const [productKey,  setProductKey]  = useState(prevMatch ? prevMatch.value : prevProduct ? 'custom' : 'handmade-candle');
+  const [customLabel, setCustomLabel] = useState(prevProduct && !prevMatch ? prevProduct : '');
+  const [condition,   setCondition]   = useState(state?.condition || 'New (handmade)');
+  const [currency,    setCurrency]    = useState(state?.currency || detectCurrency);
   const [loading,     setLoading]     = useState(false);
   const [error,       setError]       = useState('');
 

@@ -1,13 +1,14 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import DashboardNavbar from '@/components/DashboardNavbar/DashboardNavbar';
 import { gradients, colors } from '@/constants/colors';
 import { useAuth } from '@/context/AuthContext';
 
 export default function BusinessPlanInput() {
   const navigate        = useNavigate();
+  const { state }       = useLocation();
   const { token }       = useAuth();
-  const [idea, setIdea] = useState('');
+  const [idea, setIdea] = useState(state?.idea || '');
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState('');
 

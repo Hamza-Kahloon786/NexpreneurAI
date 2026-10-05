@@ -94,7 +94,7 @@ export default function PriceSuggestionResult() {
               Your Recommended Price Range
             </h1>
             <div style={{ display: 'flex', gap: 10 }}>
-              <button onClick={() => navigate('/price-suggestions')}
+              <button onClick={() => navigate('/price-suggestions', { state: { product, condition, currency } })}
                 style={{
                   display: 'flex', alignItems: 'center', gap: 6,
                   background: 'transparent', border: '1.5px solid #d1d5db',
