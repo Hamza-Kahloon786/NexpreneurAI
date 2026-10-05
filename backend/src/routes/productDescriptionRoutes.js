@@ -65,6 +65,8 @@ Rules:
       userId: req.user._id,
       type:   'product_description',
       label:  `Generated product description for "${product.trim()}"`,
+      input:  { product: product.trim() },
+      result,
     }).catch((e) => console.error('Activity save error:', e.message));
 
     res.json({ product: product.trim(), description: result });

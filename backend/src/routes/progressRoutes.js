@@ -1,4 +1,5 @@
 const express     = require('express');
+const mongoose    = require('mongoose');
 const { protect } = require('../middleware/authMiddleware');
 const Activity    = require('../models/Activity');
 
@@ -24,14 +25,40 @@ router.get('/stats', protect, async (req, res) => {
 /* ── GET /api/progress/recent ───────────────────── */
 router.get('/recent', protect, async (req, res) => {
   try {
+    // result is excluded from the list (it can be large); it's fetched on demand via /activity/:id
     const activities = await Activity.find({ userId: req.user._id })
+      .select('type label createdAt result')
       .sort({ createdAt: -1 })
       .limit(5)
       .lean();
-    res.json(activities.map((a) => ({ label: a.label, createdAt: a.createdAt })));
+    res.json(activities.map((a) => ({
+      id:        a._id,
+      type:      a.type,
+      label:     a.label,
+      createdAt: a.createdAt,
+      hasResult: a.result != null,
+    })));
   } catch (err) {
     console.error('Progress recent error:', err.message);
     res.status(500).json({ message: 'Failed to load recent activity.' });
+  }
+});
+
+/* ── GET /api/progress/activity/:id ─────────────── */
+router.get('/activity/:id', protect, async (req, res) => {
+  try {
+    if (!mongoose.isValidObjectId(req.params.id))
+      return res.status(404).json({ message: 'Activity not found.' });
+
+    // scoped to the current user so one user can't read another's results
+    const activity = await Activity.findOne({ _id: req.params.id, userId: req.user._id }).lean();
+    if (!activity || activity.result == null)
+      return res.status(404).json({ message: 'No saved result for this activity.' });
+
+    res.json({ type: activity.type, input: activity.input, result: activity.result });
+  } catch (err) {
+    console.error('Progress activity error:', err.message);
+    res.status(500).json({ message: 'Failed to load activity.' });
   }
 });
 

@@ -83,8 +83,10 @@ Rules:
 
     Activity.create({
       userId: req.user._id,
-      type:   'product_description',
+      type:   'price_suggestion',
       label:  `Generated price suggestions for "${product.trim()}"`,
+      input:  { product: product.trim(), condition, currency },
+      result: suggestions,
     }).catch((e) => console.error('Activity save error:', e.message));
 
     res.json({ product: product.trim(), condition, currency, suggestions });

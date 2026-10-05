@@ -70,5 +70,8 @@ export const getProgressStatsAPI = (token) =>
 export const getProgressRecentAPI = (token) =>
   fetch(`${BASE}/progress/recent`, { headers: headers(token) }).then((r) => r.json());
 
+export const getProgressActivityAPI = (token, id) =>
+  fetch(`${BASE}/progress/activity/${id}`, { headers: headers(token) }).then((r) => r.json());
+
 export const getProgressChartAPI = (token) =>
   fetch(`${BASE}/progress/chart`, { headers: headers(token) }).then((r) => r.json());

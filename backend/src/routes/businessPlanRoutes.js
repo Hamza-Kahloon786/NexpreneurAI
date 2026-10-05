@@ -117,6 +117,8 @@ Rules:
       userId: req.user._id,
       type:   'business_plan',
       label:  `Generated business plan for "${idea.trim()}"`,
+      input:  { idea: idea.trim() },
+      result: plan,
     }).catch((e) => console.error('Activity save error:', e.message));
 
     res.json({ idea: idea.trim(), plan });
