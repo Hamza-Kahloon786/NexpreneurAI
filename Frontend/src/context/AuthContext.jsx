@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { BASE } from '@/services/api';
 
 const AuthContext = createContext(null);
 
@@ -11,7 +12,7 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     if (!token) { setLoading(false); return; }
 
-    fetch('/api/auth/me', {
+    fetch(`${BASE}/auth/me`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((r) => r.json())
