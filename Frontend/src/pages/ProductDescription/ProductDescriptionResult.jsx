@@ -4,6 +4,7 @@ import DashboardNavbar from '@/components/DashboardNavbar/DashboardNavbar';
 import Footer          from '@/components/Footer/Footer';
 import { gradients, colors } from '@/constants/colors';
 import { useAuth } from '@/context/AuthContext';
+import { BASE } from '@/services/api';
 
 /* ── Icons ─────────────────────────────────────── */
 const EditIcon = () => (
@@ -115,7 +116,7 @@ export default function ProductDescriptionResult() {
     setRegenerating(true);
     setError('');
     try {
-      const res  = await fetch('/api/product-description/generate', {
+      const res  = await fetch(`${BASE}/product-description/generate`, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body:    JSON.stringify({ product: product.trim() }),

@@ -4,6 +4,7 @@ import DashboardNavbar from '@/components/DashboardNavbar/DashboardNavbar';
 import Footer          from '@/components/Footer/Footer';
 import { gradients, colors } from '@/constants/colors';
 import { useAuth } from '@/context/AuthContext';
+import { BASE } from '@/services/api';
 
 /* ── Product catalogue ──────────────────────────── */
 const PRODUCT_TYPES = [
@@ -103,7 +104,7 @@ export default function PriceSuggestionInput() {
     setError('');
     setLoading(true);
     try {
-      const res  = await fetch('/api/price-suggestions/generate', {
+      const res  = await fetch(`${BASE}/price-suggestions/generate`, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body:    JSON.stringify({ product: finalProduct, condition, currency }),

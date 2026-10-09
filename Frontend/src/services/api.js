@@ -1,4 +1,6 @@
-const BASE = '/api';
+// In dev, VITE_API_URL is unset and Vite proxies /api to localhost:5000.
+// In production (Vercel) set VITE_API_URL=https://api.yourdomain.com (no trailing slash).
+export const BASE = `${(import.meta.env.VITE_API_URL || '').replace(/\/$/, '')}/api`;
 
 const headers = (token) => ({
   'Content-Type': 'application/json',
