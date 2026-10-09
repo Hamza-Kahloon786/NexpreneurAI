@@ -2,6 +2,7 @@ require('dotenv').config();
 const express          = require('express');
 const cors             = require('cors');
 const path             = require('path');
+const fs               = require('fs');
 const connectDB        = require('./config/db');
 const authRoutes               = require('./routes/authRoutes');
 const userRoutes               = require('./routes/userRoutes');
@@ -33,8 +34,10 @@ app.use('/api/price-suggestions',   priceSuggestionRoutes);
 app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
 
 /* ── Serve React build in production ──────────── */
-if (process.env.NODE_ENV === 'production') {
-  const frontendDist = path.join(__dirname, '../../Frontend/dist');
+// Only when a built frontend sits next to the backend (VPS-style deploy).
+// On Render the frontend lives on Vercel, so there is no dist folder and this is skipped.
+const frontendDist = path.join(__dirname, '../../Frontend/dist');
+if (process.env.NODE_ENV === 'production' && fs.existsSync(frontendDist)) {
   app.use(express.static(frontendDist));
   app.get('*', (_req, res) => {
     res.sendFile(path.join(frontendDist, 'index.html'));
