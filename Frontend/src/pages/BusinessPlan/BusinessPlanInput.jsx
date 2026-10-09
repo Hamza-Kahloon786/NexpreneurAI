@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import DashboardNavbar from '@/components/DashboardNavbar/DashboardNavbar';
 import { gradients, colors } from '@/constants/colors';
 import { useAuth } from '@/context/AuthContext';
+import { BASE } from '@/services/api';
 
 export default function BusinessPlanInput() {
   const navigate        = useNavigate();
@@ -20,7 +21,7 @@ export default function BusinessPlanInput() {
     setLoading(true);
 
     try {
-      const res  = await fetch('/api/business-plan/generate', {
+      const res  = await fetch(`${BASE}/business-plan/generate`, {
         method:  'POST',
         headers: {
           'Content-Type': 'application/json',
